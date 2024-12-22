@@ -59,7 +59,8 @@
     border-collapse: collapse;
     margin-bottom: 20px;
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 10px;
       text-align: left;
@@ -89,18 +90,18 @@
       }
     }
 
-    .delete-button {
-      background-color: #dc3545;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
+    // .delete-button {
+    //   background-color: #dc3545;
+    //   border: none;
+    //   color: white;
+    //   padding: 5px 10px;
+    //   border-radius: 4px;
+    //   cursor: pointer;
 
-      &:hover {
-        background-color: #a71d2a;
-      }
-    }
+    //   &:hover {
+    //     background-color: #a71d2a;
+    //   }
+    // }
   }
 }
 
@@ -132,4 +133,77 @@
     font-size: 14px;
     color: #333;
   }
+}
+
+.delete-button,
+.edit-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.edit-button {
+  background-color: #4caf50; /* Un verde para diferenciarlo */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.save-button,
+.cancel-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.cancel-button {
+  background-color: #f44336; /* Rojo para cancelar */
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.undo-button {
+  background-color: #003366;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
 }

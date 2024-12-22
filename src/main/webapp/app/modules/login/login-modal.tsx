@@ -100,17 +100,13 @@ const LoginModal = (props: ILoginModalProps) => {
             </Col>
           </Row>
           <div className="mt-1">&nbsp;</div>
-          <Alert color="warning">
+          <Alert color="info">
             <Link
               to="/account/reset/request"
               data-cy="forgetYourPasswordSelector"
             >
               ¿Ha olvidado su contraseña?
             </Link>
-          </Alert>
-          <Alert color="warning">
-            <span>¿Aún no tienes una cuenta?</span>{' '}
-            <Link to="/account/register">Crea una cuenta</Link>
           </Alert>
         </ModalBody>
         <ModalFooter>

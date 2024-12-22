@@ -1,90 +1,167 @@
-@font-face {
-    font-family: 'TT Commons Pro'; /* Nombre de la fuente */
-    src: url('/content/fonts/fuente.ttf') format('opentype'); /* Ruta al archivo OTF */
-    font-weight: normal; /* Cambia esto según el peso de tu fuente */
-    font-style: normal; /* Cambia esto si la fuente es cursiva */
+.lista-espera {
+  text-align: center;
+  padding: 20px;
+  font-family: 'TT Commons Pro', Arial, sans-serif;
+
+  h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
   }
-  
-  .lista-espera {
+}
+
+.botones-fijos {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .deshacer-boton,
+  .añadir-boton {
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+
+    &:hover {
+      background-color: #001f4d;
+    }
+
+    &:disabled {
+      background-color: #808080;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.lista-espera-table {
+  width: 80%;
+  margin: auto;
+  border-collapse: collapse;
+
+  th {
+    border: 3px solid #000;
+    background-color: #eeeeee;
+    padding: 15px;
+    font-weight: bold;
+  }
+
+  td {
+    border: 3px solid #000;
+    padding: 10px;
     text-align: center;
-    padding: 20px;
-    font-family: 'TT Commons Pro', Arial, sans-serif; /* Utiliza 'TT Commons Pro' */
-  
-    h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
+  }
+
+  .fila-lista {
+    &:nth-child(odd) {
+      background-color: #e4e4e4;
+      color: #1d4e89;
+    }
+
+    &:nth-child(even) {
+      background-color: #1d4e89;
+      color: white;
     }
   }
-  
-  .lista-espera-table {
-    width: 80%;
-    margin: auto;
-    border-collapse: collapse;
-  
-    th {
-      border: 3px solid #000;
-      background-color: #eeeeee;
-      padding: 15px;
-      font-weight: bold;
-    }
-  
-    td {
-      border: 3px solid #000;
-      padding: 10px;
-      text-align: center;
-    }
-  
-    .fila-lista {
-      &:nth-child(odd) {
-        background-color: #e4e4e4; /* Gris claro para filas impares */
-        color:#1d4e89
-      }
-  
-      &:nth-child(even) {
-        background-color: #1d4e89; /* Azul para filas pares */
-        color: white; /* Texto en blanco para contraste */
-      }
-    }
-  }
-  
-  .botones-accion {
+}
+
+.botones-accion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  .accion-boton {
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
-    gap: 8px;
-  
-    .accion-boton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
+    align-items: center;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #001f4d;
+    }
+
+    &:disabled {
+      background-color: #808080;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-contenido {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  width: 300px;
+  text-align: center;
+
+  h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .modal-botones {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      padding: 10px 20px;
       border: none;
-      border-radius: 50%;
-      background-color: #003366; /* Azul oscuro para el fondo del botón */
-      color: white;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-  
-      svg {
-        fill: white;
-      }
-  
-      &:hover {
-        background-color: #001f4d; /* Color más oscuro al hacer hover */
-      }
-  
-      &:disabled {
-        background-color: #808080; /* Gris para el botón deshabilitado */
-        cursor: not-allowed;
-      }
-  
-      &.eliminar {
-        background-color: #b22222; /* Rojo oscuro para el botón de eliminar */
-  
+      transition: background-color 0.3s;
+
+      &:first-child {
+        background-color: #003366;
+        color: white;
+
         &:hover {
-          background-color: #7a1818; /* Rojo más oscuro en hover */
+          background-color: #001f4d;
+        }
+      }
+
+      &:last-child {
+        background-color: #ccc;
+
+        &:hover {
+          background-color: #aaa;
         }
       }
     }
   }
-  
+}

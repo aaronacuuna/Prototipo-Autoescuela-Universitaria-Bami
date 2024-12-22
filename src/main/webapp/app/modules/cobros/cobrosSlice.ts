@@ -38,7 +38,7 @@ export const fetchLibros = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(serializeAxiosError(error));
     }
-  }
+  },
 );
 
 // Obtener un libro por ID
@@ -51,7 +51,7 @@ export const fetchLibro = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(serializeAxiosError(error));
     }
-  }
+  },
 );
 
 // Crear un nuevo libro
@@ -64,7 +64,7 @@ export const createLibro = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(serializeAxiosError(error));
     }
-  }
+  },
 );
 
 // Eliminar un libro por ID
@@ -77,7 +77,24 @@ export const deleteLibro = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(serializeAxiosError(error));
     }
-  }
+  },
+);
+
+// Actualizar un libro por ID
+export const updateLibro = createAsyncThunk(
+  'libro/update',
+  async (libro: Libro, thunkAPI) => {
+    try {
+      const response = await axios.put<Libro>(`${apiUrl}/${libro.id}`, libro);
+      return response.data;
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        'Error al actualizar el libro';
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
 );
 
 // Slice para manejar el estado de los libros
@@ -134,11 +151,31 @@ export const libroSlice = createSlice({
       })
       .addCase(deleteLibro.fulfilled, (state, action) => {
         state.loading = false;
-        state.libros = state.libros.filter(libro => libro.id !== action.payload);
+        state.libros = state.libros.filter(
+          libro => libro.id !== action.payload,
+        );
       })
       .addCase(deleteLibro.rejected, (state, action) => {
         state.loading = false;
         state.errorMessage = action.payload as string;
+      })
+      .addCase(updateLibro.pending, state => {
+        state.loading = true;
+        state.errorMessage = null;
+        state.updateSuccess = false;
+      })
+      .addCase(updateLibro.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedLibro = action.payload;
+        state.libros = state.libros.map(libro =>
+          libro.id === updatedLibro.id ? updatedLibro : libro,
+        );
+        state.updateSuccess = true;
+      })
+      .addCase(updateLibro.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMessage = action.payload as string;
+        state.updateSuccess = false;
       });
   },
 });

@@ -8,7 +8,6 @@ export default function Contact() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '15px', // Reduje el padding
         textAlign: 'center',
         color: '#01458e',
         fontFamily: 'sans-serif',
@@ -17,9 +16,10 @@ export default function Contact() {
       {/* Encabezado */}
       <h1
         style={{
-          fontSize: '1.8em', // Tamaño más pequeño
+          fontSize: '1.6em', // Tamaño más pequeño
           fontWeight: 'bold',
           textTransform: 'uppercase',
+          marginTop: '15vh',
         }}
       >
         AUTOESCUELA <br /> UNIVERSITARIA BAMI
@@ -31,7 +31,7 @@ export default function Contact() {
         alt="Logo Autoescuela"
         style={{
           width: '120px', // Logo más pequeño
-          margin: '15px 0',
+          margin: '15px 0px',
         }}
       />
 

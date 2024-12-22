@@ -1,80 +1,126 @@
-.home-container {
+.admin-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap; /* Asegura que los elementos se ajusten en pantallas pequeñas */
-  min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  max-width: 1200px; /* Define un ancho máximo */
-  margin: 0 auto; /* Centra horizontalmente */
-  background-color: transparent; /* Fondo translúcido */
-  padding: 0 15px; /* Espaciado interno para que no toque los bordes */
-  overflow: hidden; /* Elimina cualquier scroll dentro del contenedor */
+  min-height: 100vh;
+  color: #333;
+  padding: 20px;
+}
 
-  h2.sobre-nosotros {
-    font-family: 'TT Commons Pro', sans-serif;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #333;
+.admin-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.admin-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.button-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.button span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.button-image {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* General styles for mobile view */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 10px;
   }
 
-  p {
-    font-family: 'Arial', sans-serif;
+  .admin-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .button-container {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+  }
+
+  .button {
+    padding: 10px;
+  }
+
+  .button-icon {
     font-size: 1.2rem;
-    color: #555;
-    line-height: 1.6;
+    margin-bottom: 5px;
   }
 
-  button {
-    background-color: #01458e !important;
-    border: none;
-    color: white;
-    padding: 10px 20px;
+  .button span {
+    font-size: 0.8rem;
+  }
+
+  .button-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .home-container {
+    padding: 15px;
+  }
+
+  .home-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .home-container p {
     font-size: 1rem;
-    border-radius: 5px;
-
-    &:hover {
-      background-color: #01458e;
-    }
-
-    margin-bottom: 20px; /* Añade espacio debajo del botón */
   }
 
-  img {
-    max-width: 100%; /* La imagen se adapta al ancho del contenedor */
-    height: auto; /* Mantiene la proporción de la imagen */
-    border-radius: 8px;
+  .home-container img {
+    max-width: 100%;
+    height: auto;
   }
 
-  // Ajustes para pantallas pequeñas
-  @media (max-width: 768px) {
-    flex-direction: column; /* Coloca los elementos en columna */
-    text-align: center;
-
-    img {
-      max-width: 90%; /* Reduce el ancho máximo de la imagen en pantallas pequeñas */
-      margin-top: 20px; /* Agrega espacio entre el texto y la imagen */
-    }
-
-    button {
-      margin-bottom: 20px; /* Espacio extra para separar el botón de la imagen */
-    }
-  }
-}
-
-body {
-  margin: 0;
-  overflow: hidden; /* Elimina el scroll global */
-}
-
-.custom-button {
-  background-color: #01458e;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  font-size: 1.3rem;
-  border-radius: 40px;
-
-  &:hover {
-    background-color: #003680;
+  .custom-button {
+    font-size: 1rem;
+    padding: 10px 15px;
   }
 }

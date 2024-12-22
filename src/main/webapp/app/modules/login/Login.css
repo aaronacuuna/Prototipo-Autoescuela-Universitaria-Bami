@@ -1,0 +1,195 @@
+/* General Reset */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #ffffff; /* Fondo blanco */
+  height: 100vh;
+  overflow: auto; /* Mantiene la barra de scroll siempre visible */
+}
+
+/* Contenedor principal */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Modal de inicio de sesión */
+.login-modal {
+  background: #ffffff; /* Fondo del modal */
+  width: 400px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+  position: relative;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Botón de cierre */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999999;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #003366;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Título */
+.login-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Subtítulo */
+.login-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Grupos de entrada */
+.input-group {
+  text-align: left;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #003366;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 51, 102, 0.5);
+}
+
+/* Checkbox */
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  border: 2px solid #003366;
+  border-radius: 3px;
+  position: relative;
+}
+
+.checkbox-container input[type='checkbox'] {
+  display: none;
+}
+
+.checkbox-container input[type='checkbox']:checked + .checkbox-custom {
+  background: #003366;
+}
+
+.checkbox-container input[type='checkbox']:checked + .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.remember-me-text {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Mensaje de error */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Botón */
+.login-button {
+  background: #003366;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-button:hover {
+  background: #002244;
+}
+
+/* Footer */
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.forgot-password-link {
+  color: #003366;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: #002244;
+}

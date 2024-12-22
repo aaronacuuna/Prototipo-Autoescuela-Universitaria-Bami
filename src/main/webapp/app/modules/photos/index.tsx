@@ -1,40 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector } from 'app/config/store';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { AUTHORITIES } from 'app/config/constants';
 
 export default function Photos() {
-  const [mockData, setMockData] = useState(() => {
-    const savedData = localStorage.getItem('photos');
-    return savedData
-      ? JSON.parse(savedData)
-      : [
-          {
-            admin: 'Juan Pérez',
-            description: 'Esta es la primera foto',
-            url: 'content/images/matferline.png',
-          },
-          {
-            admin: 'Ana Gómez',
-            description: 'Esta es la segunda foto',
-            url: 'content/images/matferline.png',
-          },
-          {
-            admin: 'Carlos López',
-            description: 'Esta es la tercera foto',
-            url: 'content/images/matferline.png',
-          },
-          {
-            admin: 'Marta Fernández',
-            description: 'Esta es la cuarta foto',
-            url: 'content/images/matferline.png',
-          },
-        ];
-  });
+  const [mockData, setMockData] = useState([
+    {
+      admin: 'Marta Maldonado',
+      description:
+        'Enhorabuena a Guillermo por sacarse el carnet de conducir, eres un crack',
+      url: 'content/images/happy_photo_1.jpg',
+      student: 'Guillermo Martínez',
+    },
+    {
+      admin: 'Franciso Millán',
+      description:
+        'Felicidades a Antonio, ya eres un peligro más en la carretera',
+      url: 'content/images/happy_photo_2.jpeg',
+      student: 'Antonio López',
+    },
+    {
+      admin: 'Marta Maldonado',
+      description:
+        'Enhorabuena Luis, ya puedes ir a recoger a tus hijos al cole',
+      url: 'content/images/happy_photo_3.jpeg',
+      student: 'Luis Fernández',
+    },
+    {
+      admin: 'Francisco Millán',
+      description:
+        'Muchas felicidades a Julia por sacarse el carnet de conducir',
+      url: 'content/images/happy_photo_4.jpeg',
+      student: 'Julia Gómez',
+    },
+  ]);
 
   const [newDescription, setNewDescription] = useState('');
   const [newImage, setNewImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Para el modal
+  const [selectedStudent, setSelectedStudent] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isAdmin = useAppSelector(state =>
     hasAnyAuthority(state.authentication.account.authorities, [
@@ -42,13 +46,30 @@ export default function Photos() {
     ]),
   );
 
-  useEffect(() => {
-    localStorage.setItem('photos', JSON.stringify(mockData));
-  }, [mockData]);
+  // Lista de alumnos con permiso de foto
+  const studentList = [
+    { name: 'Guillermo Martínez', hasPermission: true },
+    { name: 'Antonio López', hasPermission: false },
+    { name: 'Luis Fernández', hasPermission: true },
+    { name: 'Julia Gómez', hasPermission: true },
+    { name: 'Sofía Rodríguez', hasPermission: false },
+    { name: 'Pedro Sánchez', hasPermission: true },
+  ];
 
   const handleCreatePost = () => {
-    if (!newImage) {
-      alert('Por favor, selecciona una imagen.');
+    if (!newImage || !selectedStudent) {
+      alert('Por favor, selecciona una imagen y un alumno.');
+      return;
+    }
+
+    const selectedStudentObj = studentList.find(
+      student => student.name === selectedStudent,
+    );
+
+    if (!selectedStudentObj || !selectedStudentObj.hasPermission) {
+      alert(
+        `El alumno seleccionado, ${selectedStudent}, no tiene permiso para aparecer en fotos.`,
+      );
       return;
     }
 
@@ -57,12 +78,14 @@ export default function Photos() {
       const newPost = {
         admin: 'Admin User',
         description: newDescription,
-        url: reader.result,
+        url: reader.result as string,
+        student: selectedStudent,
       };
       setMockData([...mockData, newPost]);
       setNewDescription('');
       setNewImage(null);
-      setIsModalOpen(false); // Cerrar el modal tras añadir la publicación
+      setSelectedStudent('');
+      setIsModalOpen(false);
     };
     reader.readAsDataURL(newImage);
   };
@@ -81,30 +104,28 @@ export default function Photos() {
         marginTop: '0',
       }}
     >
-      {/* Botón fijo en la esquina inferior derecha */}
       {isAdmin && (
         <>
           <button
-            onClick={() => setIsModalOpen(true)} // Mostrar modal
+            onClick={() => setIsModalOpen(true)}
             style={{
-              position: 'fixed', // Fijo en la pantalla
-              bottom: '20px', // Separado 20px del borde inferior
-              right: '20px', // Separado 20px del borde derecho
+              position: 'fixed',
+              bottom: '20px',
+              right: '20px',
               padding: '15px 20px',
               fontSize: '16px',
               backgroundColor: '#01458e',
               color: '#fff',
               border: 'none',
-              borderRadius: '50px', // Botón redondeado
+              borderRadius: '50px',
               cursor: 'pointer',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Sombra para efecto flotante
-              zIndex: 1000, // Asegura que esté sobre otros elementos
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              zIndex: 1000,
             }}
           >
             Añadir publicación
           </button>
 
-          {/* Modal para crear publicación */}
           {isModalOpen && (
             <div
               style={{
@@ -137,6 +158,26 @@ export default function Photos() {
                   resize: 'none',
                 }}
               />
+              <select
+                value={selectedStudent}
+                onChange={e => setSelectedStudent(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  borderRadius: '5px',
+                  border: '1px solid #ccc',
+                  marginBottom: '10px',
+                }}
+              >
+                <option value="" disabled>
+                  Selecciona un alumno...
+                </option>
+                {studentList.map((student, index) => (
+                  <option key={index} value={student.name}>
+                    {student.name}
+                  </option>
+                ))}
+              </select>
               <input
                 type="file"
                 accept="image/*"
@@ -147,7 +188,7 @@ export default function Photos() {
               />
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <button
-                  onClick={() => setIsModalOpen(false)} // Cerrar modal
+                  onClick={() => setIsModalOpen(false)}
                   style={{
                     padding: '10px 20px',
                     fontSize: '16px',
@@ -177,10 +218,9 @@ export default function Photos() {
               </div>
             </div>
           )}
-          {/* Fondo oscuro al abrir el modal */}
           {isModalOpen && (
             <div
-              onClick={() => setIsModalOpen(false)} // Cerrar modal al hacer clic fuera
+              onClick={() => setIsModalOpen(false)}
               style={{
                 position: 'fixed',
                 top: '0',
@@ -194,8 +234,6 @@ export default function Photos() {
           )}
         </>
       )}
-
-      {/* Mostrar publicaciones */}
       <div
         style={{
           width: '100%',
@@ -221,7 +259,7 @@ export default function Photos() {
           >
             <img
               src={photo.url}
-              alt={`Foto de ${photo.admin}`}
+              alt={`Foto de ${photo.student}`}
               style={{
                 width: '100%',
                 height: 'auto',
@@ -257,6 +295,9 @@ export default function Photos() {
               </div>
               <p style={{ margin: '0', fontSize: '1em', color: '#555' }}>
                 {photo.description}
+              </p>
+              <p style={{ margin: '0', fontSize: '0.9em', color: '#888' }}>
+                Alumno: {photo.student}
               </p>
             </div>
           </div>

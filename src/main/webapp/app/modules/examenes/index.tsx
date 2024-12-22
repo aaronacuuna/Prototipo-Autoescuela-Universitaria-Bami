@@ -13,6 +13,7 @@ const ScraperNotaComponent: React.FC = () => {
     fechaExamen: string;
   } | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showNotification, setShowNotification] = useState<boolean>(false);
 
   const handleScrape = () => {
     if (!dni || !fechaNacimiento || !fechaExamen) {
@@ -25,7 +26,7 @@ const ScraperNotaComponent: React.FC = () => {
 
     // Simulación de los resultados
     setTimeout(() => {
-      const errores = Math.floor(Math.random() * 7); // Número aleatorio de errores (0-9)
+      const errores = Math.floor(Math.random() * 7); // Número aleatorio de errores (0-6)
       const apto = errores <= 3; // Si los errores son 3 o menos, el resultado es "Apto"
       const tipoExamen = Math.random() > 0.5 ? 'Teórico' : 'Práctico'; // Aleatorio entre Teórico y Práctico
 
@@ -35,15 +36,20 @@ const ScraperNotaComponent: React.FC = () => {
         tipoExamen,
         fechaExamen, // Mantenemos la fecha de examen ingresada
       });
+
       setLoading(false);
+
+      // Mostrar notificación por 3 segundos
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
     }, 1000); // Simulamos un tiempo de espera de 1 segundo
   };
 
   return (
     <div className="scraper-container">
-      <h2>RESULTADOS</h2>
+      <h2>Resultados del Examen</h2>
       <div className="input-container">
-        <label htmlFor="dni">Ingresa el DNI del alumno</label>
+        <label htmlFor="dni">DNI del alumno</label>
         <input
           id="dni"
           type="text"
@@ -52,7 +58,7 @@ const ScraperNotaComponent: React.FC = () => {
         />
       </div>
       <div className="input-container">
-        <label htmlFor="fecha-examen">Ingresa la fecha del examen</label>
+        <label htmlFor="fecha-examen">Fecha del examen</label>
         <input
           id="fecha-examen"
           type="date"
@@ -61,9 +67,7 @@ const ScraperNotaComponent: React.FC = () => {
         />
       </div>
       <div className="input-container">
-        <label htmlFor="fecha-nacimiento">
-          Ingresa la fecha de nacimiento del alumno
-        </label>
+        <label htmlFor="fecha-nacimiento">Fecha de nacimiento</label>
         <input
           id="fecha-nacimiento"
           type="date"
@@ -74,14 +78,31 @@ const ScraperNotaComponent: React.FC = () => {
       <button onClick={handleScrape} disabled={loading}>
         {loading ? 'Cargando...' : 'ENVIAR'}
       </button>
-      {/* Renderizado de errores o resultados */}
+
       {errorMessage && <p className="error-message">Error: {errorMessage}</p>}
       {result && (
         <div className="result-message">
-          <p>Número de errores: {result.errores}</p>
-          <p>Estado: {result.apto ? 'Apto' : 'No Apto'}</p>
-          <p>Tipo de examen: {result.tipoExamen}</p>
-          <p>Fecha del examen: {result.fechaExamen}</p>
+          <h3>Resultado</h3>
+          <div className={`resultado ${result.apto ? 'apto' : 'no-apto'}`}>
+            <p>
+              <strong>Errores:</strong> {result.errores}
+            </p>
+            <p>
+              <strong>Estado:</strong> {result.apto ? 'Apto' : 'No Apto'}
+            </p>
+            <p>
+              <strong>Tipo de examen:</strong> {result.tipoExamen}
+            </p>
+            <p>
+              <strong>Fecha del examen:</strong> {result.fechaExamen}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {showNotification && (
+        <div className="notification">
+          <p>Resultado enviado al alumno</p>
         </div>
       )}
     </div>

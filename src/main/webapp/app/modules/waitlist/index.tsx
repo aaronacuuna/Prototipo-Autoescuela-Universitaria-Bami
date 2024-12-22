@@ -28,9 +28,7 @@ export default function Waitlist() {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%', // Asegúrate de que el contenedor ocupe todo el alto
-        backgroundColor: '#e0e0e0', // Fondo gris
         padding: '20px',
-        boxSizing: 'border-box',
         overflow: 'hidden', // Asegura que no haya desbordamiento dentro del contenedor
       }}
     >
@@ -76,7 +74,7 @@ export default function Waitlist() {
           maxWidth: '600px',
           height: '20px',
           borderRadius: '10px',
-          backgroundColor: '#ffffff', // Fondo blanco de la barra
+          backgroundColor: '#e8e8e8', // Fondo blanco de la barra
           overflow: 'hidden',
           marginBottom: '20px',
         }}

@@ -49,7 +49,7 @@ export default function MyExams() {
       <div
         style={{
           width: '100%',
-          maxWidth: '80vw',
+          maxWidth: '50vw',
           display: 'flex',
           flexDirection: 'column',
           gap: '2vh',
@@ -63,7 +63,6 @@ export default function MyExams() {
               border: '1px solid #ccc',
               borderRadius: '10px',
               padding: '2vh',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
               textAlign: 'center',
             }}
           >

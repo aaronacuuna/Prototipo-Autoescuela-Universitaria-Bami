@@ -1,21 +1,38 @@
+// Cobros.tsx
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLibros, createLibro, deleteLibro } from './cobrosSlice';
+import {
+  fetchLibros,
+  createLibro,
+  deleteLibro,
+  updateLibro,
+} from './cobrosSlice';
 import { AppDispatch, RootState } from 'app/config/store';
 
 import './libros.scss';
+
+interface Libro {
+  id: number;
+  titulo: string;
+  url: string;
+}
 
 const Cobros: React.FC = () => {
   const [titulo, setTitulo] = useState<string>('');
   const [url, setUrl] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editingLibroId, setEditingLibroId] = useState<number | null>(null);
+  const [editTitulo, setEditTitulo] = useState<string>('');
+  const [editUrl, setEditUrl] = useState<string>('');
+  const [previousLibro, setPreviousLibro] = useState<Libro | null>(null);
 
   const dispatch: AppDispatch = useDispatch();
   const { libros, loading, errorMessage } = useSelector(
     (state: RootState) => state.libro,
   );
 
-  const librosPerPage = 4;
+  const librosPerPage = 6;
   const totalPages = Math.ceil(libros.length / librosPerPage);
 
   const currentLibros = libros.slice(
@@ -38,7 +55,38 @@ const Cobros: React.FC = () => {
   };
 
   const handleDeleteLibro = (id: number) => {
-    dispatch(deleteLibro(id));
+    const libroToDelete = libros.find(libro => libro.id === id);
+    if (libroToDelete) {
+      setPreviousLibro(libroToDelete);
+      dispatch(deleteLibro(id));
+    }
+  };
+
+  const handleUndoDelete = () => {
+    if (previousLibro) {
+      dispatch(createLibro(previousLibro));
+      setPreviousLibro(null);
+    }
+  };
+
+  const handleEditLibro = (libro: Libro) => {
+    setIsEditing(true);
+    setEditingLibroId(libro.id);
+    setEditTitulo(libro.titulo);
+    setEditUrl(libro.url);
+  };
+
+  const handleSaveEdit = () => {
+    if (editTitulo && editUrl && editingLibroId !== null) {
+      const libro = { id: editingLibroId, titulo: editTitulo, url: editUrl };
+      dispatch(updateLibro(libro));
+      setIsEditing(false);
+      setEditingLibroId(null);
+      setEditTitulo('');
+      setEditUrl('');
+    } else {
+      alert('Por favor complete todos los campos de edición.');
+    }
   };
 
   const changePage = (page: number) => {
@@ -47,11 +95,19 @@ const Cobros: React.FC = () => {
     }
   };
 
+  const getFileTypeIcon = (fileUrl: string): string => {
+    if (fileUrl.includes('document')) return 'content/images/word.png';
+    if (fileUrl.includes('presentation'))
+      return 'content/images/powerpoint.png';
+    if (fileUrl.includes('spreadsheets')) return 'content/images/excel.png';
+    if (fileUrl.includes('forms')) return 'content/images/form.png';
+    return 'content/images/file.png';
+  };
+
   return (
     <div className="libros-container">
       <h2>Gestión de Libros</h2>
 
-      {/* Formulario para añadir libros */}
       <div className="input-container">
         <label htmlFor="titulo">Título</label>
         <input
@@ -70,23 +126,30 @@ const Cobros: React.FC = () => {
           onChange={e => setUrl(e.target.value)}
         />
       </div>
-      <button
-        onClick={handleAddLibro}
-        disabled={loading}
-        className="add-button"
-      >
-        {loading ? 'Cargando...' : 'Añadir Libro'}
-      </button>
+      <div className="buttons-container">
+        <button
+          onClick={handleAddLibro}
+          disabled={loading}
+          className="add-button"
+        >
+          {loading ? 'Cargando...' : 'Añadir Libro'}
+        </button>
+        {previousLibro && (
+          <button className="undo-button" onClick={handleUndoDelete}>
+            Deshacer
+          </button>
+        )}
+      </div>
 
-      {/* Tabla de libros */}
       <div className="libros-table">
         {loading && <p>Cargando libros...</p>}
-        {errorMessage && <p>Error: {errorMessage}</p>}
+        {errorMessage && <p style={{ color: 'red' }}>Error: {errorMessage}</p>}
         {!loading && !errorMessage && (
           <>
             <table>
               <thead>
                 <tr>
+                  <th>Tipo</th>
                   <th>Libro de cobros</th>
                   <th>Acciones</th>
                 </tr>
@@ -94,6 +157,19 @@ const Cobros: React.FC = () => {
               <tbody>
                 {currentLibros.map(libro => (
                   <tr key={libro.id}>
+                    <td>
+                      <img
+                        src={getFileTypeIcon(libro.url)}
+                        alt="File Type Icon"
+                        className="file-type-icon"
+                        style={{
+                          width: '50px',
+                          height: '60px',
+                          display: 'block',
+                          margin: '0 auto',
+                        }}
+                      />
+                    </td>
                     <td>
                       <a
                         href={libro.url}
@@ -111,13 +187,18 @@ const Cobros: React.FC = () => {
                       >
                         Borrar
                       </button>
+                      <button
+                        onClick={() => handleEditLibro(libro)}
+                        className="edit-button"
+                      >
+                        Editar
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Paginación */}
             <div className="pagination">
               <button
                 onClick={() => changePage(currentPage - 1)}
@@ -140,6 +221,41 @@ const Cobros: React.FC = () => {
           </>
         )}
       </div>
+
+      {isEditing && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Editar Libro</h3>
+            <div className="input-container">
+              <label htmlFor="edit-titulo">Título</label>
+              <input
+                id="edit-titulo"
+                type="text"
+                value={editTitulo}
+                onChange={e => setEditTitulo(e.target.value)}
+              />
+            </div>
+            <div className="input-container">
+              <label htmlFor="edit-url">URL</label>
+              <input
+                id="edit-url"
+                type="text"
+                value={editUrl}
+                onChange={e => setEditUrl(e.target.value)}
+              />
+            </div>
+            <button onClick={handleSaveEdit} className="save-button">
+              Guardar
+            </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              className="cancel-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
